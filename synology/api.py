@@ -7,9 +7,10 @@ from .utils import jsondump
 
 
 class Api:
-    def __init__(self, host, user, passwd, port='5000'):
+    def __init__(self, host, user, passwd, port='5000', is_https=False):
         self.host = host
         self.port = port
+        self.is_https = is_https
         self.user = user
         self.passwd = passwd
         self.sid = ''
@@ -50,7 +51,7 @@ class Api:
         self.req(logout_endpoint)
 
     def base_endpoint(self, cgi):
-        ret = 'http://' + self.host + ':' + self.port + '/webapi/' + cgi
+        ret = ('https' if self.is_https else 'http') + '://' + self.host + ':' + self.port + '/webapi/' + cgi
         return ret
 
     def endpoint(self, api, query='', cgi='query.cgi', version='1', method='query', extra={}):
