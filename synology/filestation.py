@@ -64,7 +64,7 @@ class FileStation(Api):
             }
         ))
 
-    def search(self, path, pattern):
+    def search(self, path, pattern, limit=100):
         """Search for files/folders"""
         start = self.req(self.endpoint(
             'SYNO.FileStation.Search',
@@ -85,8 +85,8 @@ class FileStation(Api):
                 cgi=self.cgi_path,
                 method='list',
                 extra={
-                    'taskid': start['taskid'],
-                    'limit': -1
+                    'taskid': '"{0}"'.format(start['taskid']),
+                    'limit': limit
                 }
             ))
             if file_list['finished']:
@@ -117,7 +117,7 @@ class FileStation(Api):
                 'SYNO.FileStation.DirSize',
                 cgi=self.cgi_path,
                 method='status',
-                extra={'taskid': start['taskid']}
+                extra={'taskid': '"{0}"'.format(start['taskid'])}
             ))
             if status['finished']:
                 return int(status['total_size'])
@@ -139,7 +139,7 @@ class FileStation(Api):
                 'SYNO.FileStation.MD5',
                 cgi='FileStation/file_md5.cgi',
                 method='status',
-                extra={'taskid': start['taskid']}
+                extra={'taskid': '"{0}"'.format(start['taskid'])}
             ))
             if status['finished']:
                 return status['md5']
